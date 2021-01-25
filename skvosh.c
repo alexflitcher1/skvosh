@@ -8,12 +8,10 @@
 
 int main(void)
 {
-	fd_set rfds;
-	struct timeval tv;
-	int retval;
 	char key;	
 	char lastSymbol;
 
+	// set non-canonical mode
 	set_keypress();
 
 	int ball[2] = {1, 3};
@@ -50,7 +48,7 @@ int main(void)
 	    drawMap(FIELD_SIZE_HEIGHT, FIELD_SIZE_WEIGHT, field, 10);
 	    if ((key = getc(stdin)))
 		    clearField();
-            
+            // keys press
 	    switch(key) {
 	       case 'w':
 		 lastSymbol = moveBall(FIELD_SIZE_HEIGHT, FIELD_SIZE_WEIGHT, field, ball, "up");
@@ -67,12 +65,14 @@ int main(void)
 	       default:
 		break;
 	    }
+	    // check collision '#'
 	    if (checkCollision(lastSymbol)) {
 	        clearField();
 		drawMap(GAMEOVER_SIZE_HEIGHT, GAMEOVER_SIZE_WEIGHT, gameOverText, 6);
 		reset_keypress();
 		exit(0);
 	    }
+	    // check won '+'
 	    if (checkWon(lastSymbol)) {
 	    	clearField();
 	       	drawMap(YOUWON_SIZE_HEIGHT, YOUWON_SIZE_WEIGHT, youWon, 6);
@@ -82,6 +82,7 @@ int main(void)
 	    
 	}
 
+	// return to canonical mode
 	reset_keypress();
 
 	return 0;
